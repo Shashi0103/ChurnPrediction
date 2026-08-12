@@ -240,8 +240,13 @@ if page == "📊 Dashboard & Data Insights":
 
     with v_tabs[4]:
         st.markdown("#### Numerical Features Correlation Matrix")
-        num_cols = ["tenure", "MonthlyCharges", "TotalCharges", "Churn_Num"]
-        corr_df = df_clean[num_cols].corr()
+        num_df = pd.DataFrame()
+        num_df["tenure"] = pd.to_numeric(df_clean["tenure"], errors="coerce")
+        num_df["MonthlyCharges"] = pd.to_numeric(df_clean["MonthlyCharges"], errors="coerce")
+        num_df["TotalCharges"] = pd.to_numeric(df_clean["TotalCharges"], errors="coerce")
+        num_df["Churn_Num"] = (df_clean["Churn"] == "Yes").astype(int) if "Churn" in df_clean.columns else pd.to_numeric(y_target, errors="coerce")
+        
+        corr_df = num_df.corr()
         fig, ax = plt.subplots(figsize=(6, 3.5))
         sns.heatmap(corr_df, annot=True, fmt=".2f", cmap="coolwarm", cbar=True, ax=ax)
         ax.set_title("Numerical Features Correlation", fontweight="bold")
