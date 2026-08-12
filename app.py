@@ -13,7 +13,7 @@ import streamlit as st
 
 # Setup page configuration
 st.set_page_config(
-    page_title="Customer Churn Prediction | ML & SHAP AI Platform",
+    page_title="Customer Churn Prediction Platform",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
