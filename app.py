@@ -97,12 +97,12 @@ from src.evaluation import (
     plot_shap_summary_fig, plot_shap_bar_fig, plot_individual_shap_waterfall_fig
 )
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Caching dataset loading
 @st.cache_data
 def get_cached_data():
-    data_path = "data/customer_churn.csv"
-    if not os.path.exists(data_path):
-        return None, None, None
+    data_path = os.path.join(BASE_DIR, "data", "customer_churn.csv")
     return load_raw_data(data_path)
 
 # Caching models loading
@@ -114,7 +114,8 @@ def get_cached_models():
     return model_bundle, metadata_bundle
 
 # Sidebar Navigation (Minimalist 4-Page Layout)
-st.sidebar.image("assets/logo.png" if os.path.exists("assets/logo.png") else "📊", use_container_width=True)
+logo_path = os.path.join(BASE_DIR, "assets", "logo.png")
+st.sidebar.image(logo_path if os.path.exists(logo_path) else "📊", use_container_width=True)
 st.sidebar.markdown("<div class='sidebar-header'>Navigation</div>", unsafe_allow_html=True)
 
 page = st.sidebar.radio(
@@ -142,6 +143,10 @@ with st.sidebar.expander("ℹ️ About System Architecture"):
 # Load cached data and models
 df_clean, X_raw, y_target = get_cached_data()
 model_bundle, metadata_bundle = get_cached_models()
+
+if df_clean is None or y_target is None:
+    st.error("Failed to initialize dataset. Please check data/customer_churn.csv.")
+    st.stop()
 
 
 # ==========================================

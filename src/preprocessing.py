@@ -3,16 +3,29 @@ src/preprocessing.py
 Data loading, cleaning, feature engineering, and scikit-learn preprocessing pipeline.
 """
 
+import os
+import urllib.request
 import pandas as pd
 import numpy as np
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-def load_raw_data(data_path: str = "data/customer_churn.csv"):
+
+def load_raw_data(data_path: str = None):
     """
     Load customer churn CSV dataset, perform data cleaning and type conversion.
+    Auto-downloads dataset if missing.
     """
+    if data_path is None:
+        data_path = os.path.join(BASE_DIR, "data", "customer_churn.csv")
+
+    if not os.path.exists(data_path):
+        os.makedirs(os.path.dirname(data_path), exist_ok=True)
+        url = "https://raw.githubusercontent.com/alexeygrigorev/mlbookcamp-code/master/chapter-03-churn-prediction/WA_Fn-UseC_-Telco-Customer-Churn.csv"
+        urllib.request.urlretrieve(url, data_path)
+
     df = pd.read_csv(data_path)
     df_clean = df.copy()
 

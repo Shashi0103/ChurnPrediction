@@ -15,10 +15,18 @@ import shap
 from src.preprocessing import engineer_features, load_raw_data
 
 
-def load_model_artifacts(model_path="models/churn_model.pkl", metadata_path="models/model_metadata.pkl"):
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+
+def load_model_artifacts(model_path=None, metadata_path=None):
     """
     Load pre-trained model bundle and evaluation metadata bundle from disk.
     """
+    if model_path is None:
+        model_path = os.path.join(BASE_DIR, "models", "churn_model.pkl")
+    if metadata_path is None:
+        metadata_path = os.path.join(BASE_DIR, "models", "model_metadata.pkl")
+
     if not os.path.exists(model_path) or not os.path.exists(metadata_path):
         return None, None
     
