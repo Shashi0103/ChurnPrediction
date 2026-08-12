@@ -157,8 +157,8 @@ if page == "📊 Dashboard & Data Insights":
     st.markdown("Executive summary of customer demographics, churn indicators, and key feature distributions.")
     
     total_cust = len(df_clean)
-    churn_cust = int(y_target.sum())
-    churn_rate = (churn_cust / total_cust) * 100
+    churn_cust = int(((y_target == 1) | (y_target == "Yes")).sum())
+    churn_rate = (churn_cust / total_cust) * 100 if total_cust > 0 else 0.0
     avg_monthly = df_clean["MonthlyCharges"].mean()
     avg_tenure = df_clean["tenure"].mean()
     
